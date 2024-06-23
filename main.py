@@ -32,7 +32,7 @@ class Player(GameSprite):
         elif key[pygame.K_RIGHT]:
             self.rect.x += 10
     def move(self):
-        self.rect.y -= random.randint(1,5)
+        self.rect.y -= random.randint(2, 6)
 
 class Tree(GameSprite):
     def update(self):
@@ -47,6 +47,9 @@ finish = False
 
 level = 1
 
+pygame.font.init()
+font = pygame.font.Font(None, 60)
+
 tree1 = Tree("tree.png",(100,100), (200,100))
 tree2 = Tree("tree.png",(100,100), (800,100))
 
@@ -55,7 +58,7 @@ car1 = Player("car_image1.png", (100,200),(WIDTH-400,HEIGH-50))
 car2 = Player("car_image2.png",(100,200), (WIDTH-600, HEIGH-50)) 
 
 finish_line = GameSprite("finish.png", (230,220), (470, 100))
-
+text = None
 while not game_over:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -78,19 +81,28 @@ while not game_over:
         if  car1.rect.colliderect(tree1.rect) or \
                 car1.rect.colliderect(tree2.rect):
             finish = True
+            text = font.render("1 машина розбилася!", True, (255,0,0))
 
         if  car2.rect.colliderect(tree1.rect) or \
                 car2.rect.colliderect(tree2.rect):
             finish = True
+            text = font.render("2 машина розбилася!", True, (255,0,0))
         
         if  car2.rect.colliderect(car1.rect):
             finish = True
+            text = font.render("Машини розбилися!", True, (255,0,0))
 
         if  car2.rect.colliderect(finish_line.rect):
             finish = True
+            text = font.render("Перемогла 2 машина!", True, (255,0,0))
 
         if  car1.rect.colliderect(finish_line.rect):
             finish = True
+            text = font.render("Перемогла 1 машина!", True, (255,0,0))
+
+        if text: 
+            window.blit(text, (0,0))
+
 
 
     pygame.display.update()
